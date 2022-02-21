@@ -23,7 +23,7 @@ python3 ../../../main_pretrain.py \
     --zero_init_residual \
     --name nnsiam_res18 \
     --project CIFAR100-200ep \
-    --entity kaistaim \
+    --entity kaistssl \
     --wandb \
     --save_checkpoint \
     --method nnsiam \
@@ -31,6 +31,3 @@ python3 ../../../main_pretrain.py \
     --proj_hidden_dim 2048 \
     --pred_hidden_dim 4096 \
     --knn_eval \
-    --lam 0.1 \
-    --tau_decor 0.1 \
-    --our_loss False \

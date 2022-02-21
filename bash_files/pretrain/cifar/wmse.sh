@@ -25,13 +25,10 @@ python3 ../../../main_pretrain.py \
     --min_scale 0.2 \
     --name wmse_res18 \
     --project CIFAR100-200ep \
-    --entity kaistaim \
+    --entity kaistssl \
     --wandb \
     --save_checkpoint \
     --method wmse \
     --proj_output_dim 64 \
     --whitening_size 128 \
     --knn_eval \
-    --lam 0.1 \
-    --tau_decor 0.1 \
-    --our_loss False \

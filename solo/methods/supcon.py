@@ -65,7 +65,7 @@ class SupCon(BaseMethod):
         # our loss
         parser.add_argument("--lam", type=float, default=0.1)
         parser.add_argument("--tau_decor", type=float, default=0.1)
-        parser.add_argument("--our_loss", type=str, default='True')
+        parser.add_argument("--our_loss", type=str, default='False')
         
 
         return parent_parser

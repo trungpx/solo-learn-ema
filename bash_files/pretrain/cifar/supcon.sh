@@ -26,7 +26,7 @@ python3 ../../../main_pretrain.py \
     --num_crops_per_aug 1 1 \
     --name supcon_res18 \
     --project CIFAR100-200ep \
-    --entity kaistaim \
+    --entity kaistssl \
     --wandb \
     --save_checkpoint \
     --method supcon \
@@ -34,6 +34,3 @@ python3 ../../../main_pretrain.py \
     --proj_hidden_dim 2048 \
     --proj_output_dim 256 \
     --knn_eval \
-    --lam 0.1 \
-    --tau_decor 0.1 \
-    --our_loss False \

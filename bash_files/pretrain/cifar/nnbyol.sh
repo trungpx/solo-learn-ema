@@ -27,7 +27,7 @@ python3 ../../../main_pretrain.py \
     --num_crops_per_aug 1 1 \
     --name nnbyol_res18 \
     --project CIFAR100-200ep \
-    --entity kaistaim \
+    --entity kaistssl \
     --wandb \
     --save_checkpoint \
     --method nnbyol \
@@ -38,6 +38,3 @@ python3 ../../../main_pretrain.py \
     --final_tau_momentum 1.0 \
     --momentum_classifier \
     --knn_eval \
-    --lam 0.1 \
-    --tau_decor 0.1 \
-    --our_loss False \

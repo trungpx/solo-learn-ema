@@ -102,7 +102,7 @@ class BYOL(BaseMomentumMethod):
         # our loss
         parser.add_argument("--lam", type=float, default=0.1)
         parser.add_argument("--tau_decor", type=float, default=0.1)
-        parser.add_argument("--our_loss", type=str, default='True')
+        parser.add_argument("--our_loss", type=str, default='False')
         parser.add_argument("--lam_simple", type=float, default=1.0)
         parser.add_argument("--lamb_barlow", type=float, default=0.0051)
 

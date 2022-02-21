@@ -28,7 +28,7 @@ python3 ../../../main_pretrain.py \
     --num_crops_per_aug 1 1 \
     --name deepclusterv2_res18 \
     --project CIFAR100-200ep \
-    --entity kaistaim \
+    --entity kaistssl \
     --wandb \
     --save_checkpoint \
     --method deepclusterv2 \
@@ -36,6 +36,3 @@ python3 ../../../main_pretrain.py \
     --proj_output_dim 128 \
     --num_prototypes 3000 3000 3000 \
     --knn_eval \
-    --lam 0.1 \
-    --tau_decor 0.1 \
-    --our_loss False \
