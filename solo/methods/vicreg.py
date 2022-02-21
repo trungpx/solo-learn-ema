@@ -140,24 +140,13 @@ class VICReg(BaseMethod):
         z2 = self.projector(feats2)
 
         # ------- vicreg loss -------
-        vicreg_loss = vicreg_loss_func(
+        total_loss = vicreg_loss_func(
             z1,
             z2,
             sim_loss_weight=self.sim_loss_weight,
             var_loss_weight=self.var_loss_weight,
             cov_loss_weight=self.cov_loss_weight,
         )
-
-        ### add our loss
-        original_loss = vicreg_loss
-        if self.our_loss=='True':
-            our_loss = ours_loss_func(z1, z2, indexes=batch[0].repeat(self.num_large_crops + self.num_small_crops), tau_decor = self.tau_decor)
-            total_loss = self.lam*our_loss + (1-self.lam)*original_loss
-        elif self.our_loss=='False':
-            total_loss = original_loss
-        else:
-            assert self.our_loss in ['True', 'False'], 'Input of our_loss is only True or False'
-        ###
 
         self.log("train_vicreg_loss", total_loss, on_epoch=True, sync_dist=True)
         with torch.no_grad():

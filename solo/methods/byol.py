@@ -68,6 +68,7 @@ class BYOL(BaseMomentumMethod):
             nn.BatchNorm1d(proj_hidden_dim),
             nn.ReLU(),
             nn.Linear(proj_hidden_dim, proj_output_dim),
+            # nn.BatchNorm1d(proj_output_dim, affine=False), # just for simsiam, remove for default
         )
 
         # momentum projector
@@ -76,6 +77,7 @@ class BYOL(BaseMomentumMethod):
             nn.BatchNorm1d(proj_hidden_dim),
             nn.ReLU(),
             nn.Linear(proj_hidden_dim, proj_output_dim),
+            # nn.BatchNorm1d(proj_output_dim, affine=False), # just for simsiam, remove for default
         )
         initialize_momentum_params(self.projector, self.momentum_projector)
 
@@ -161,25 +163,9 @@ class BYOL(BaseMomentumMethod):
             Z_momentum = [self.momentum_projector(f) for f in momentum_feats]
 
         # ------- negative consine similarity loss -------
-        total_loss = 0
-        # byol_loss = byol_loss_func(P[1], Z_momentum[0] + P[0]) + byol_loss_func(P[0], Z_momentum[1] + P[1])
-        byol_loss = byol_loss_func(P[1], Z_momentum[0]) + byol_loss_func(P[0], Z_momentum[1])
 
-        ### add our loss
-        original_loss = byol_loss
-        if self.our_loss=='True':
-            # our_loss = barlow_loss_func(Z[0], Z[1], lamb=self.lamb_barlow)
-            # our_loss = ours_loss_func(Z[0], Z[1], indexes=batch[0].repeat(self.num_large_crops + self.num_small_crops), tau_decor = self.tau_decor)
-            # our_loss = ours_simple_loss_func(Z[0], Z[1], indexes=batch[0].repeat(self.num_large_crops + self.num_small_crops), 
-            #                 tau_decor = self.tau_decor, lam_simple = self.lam_simple)
-            our_loss = ours_loss_func_multigpu(Z[0], Z[1], indexes=batch[0].repeat(self.num_large_crops + self.num_small_crops), tau_decor = self.tau_decor)
-            total_loss = self.lam*our_loss + (1-self.lam)*original_loss
-            
-        elif self.our_loss=='False':
-            total_loss = original_loss
-        else:
-            assert self.our_loss in ['True', 'False'], 'Input of our_loss is only True or False'
-        ###
+        total_loss = byol_loss_func(P[1], Z_momentum[0]) + byol_loss_func(P[0], Z_momentum[1]) # byol
+        # total_loss = byol_loss_func(P[1], Z[0].detach()) + byol_loss_func(P[0], Z[1].detach()) # simsiam
 
         # calculate std of features
         with torch.no_grad():

@@ -137,22 +137,9 @@ class BarlowTwins(BaseMethod):
         z2 = self.projector(feats2)
 
         # ------- barlow twins loss -------
-        barlow_loss = barlow_loss_func(z1, z2, lamb=self.lamb, scale_loss=self.scale_loss)
+        total_loss = barlow_loss_func(z1, z2, lamb=self.lamb, scale_loss=self.scale_loss)
 
-        self.log("train_barlow_loss", barlow_loss, on_epoch=True, sync_dist=True)
-
-        # ipdb.set_trace()
-
-        ### add our loss
-        original_loss = barlow_loss
-        if self.our_loss=='True':
-            our_loss = ours_loss_func(z1, z2, indexes=batch[0].repeat(self.num_large_crops + self.num_small_crops), tau_decor = self.tau_decor)
-            total_loss = self.lam*our_loss + (1-self.lam)*original_loss
-        elif self.our_loss=='False':
-            total_loss = original_loss
-        else:
-            assert self.our_loss in ['True', 'False'], 'Input of our_loss is only True or False'
-        ###
+        self.log("train_barlow_loss", total_loss, on_epoch=True, sync_dist=True)
 
         with torch.no_grad():
             z_std = F.normalize(torch.stack((z1,z2)), dim=-1).std(dim=1).mean()

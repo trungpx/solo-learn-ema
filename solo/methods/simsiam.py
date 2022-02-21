@@ -155,18 +155,7 @@ class SimSiam(BaseMethod):
         p2 = self.predictor(z2)
 
         # ------- contrastive loss -------
-        neg_cos_sim = simsiam_loss_func(p1, z2) / 2 + simsiam_loss_func(p2, z1) / 2
-
-        ### add our loss
-        original_loss = neg_cos_sim
-        if self.our_loss=='True':
-            our_loss = ours_loss_func(z1_ori, z2_ori, indexes=batch[0].repeat(self.num_large_crops + self.num_small_crops), tau_decor = self.tau_decor)
-            total_loss = self.lam*our_loss + (1-self.lam)*original_loss
-        elif self.our_loss=='False':
-            total_loss = original_loss
-        else:
-            assert self.our_loss in ['True', 'False'], 'Input of our_loss is only True or False'
-        ###
+        total_loss = simsiam_loss_func(p1, z2) / 2 + simsiam_loss_func(p2, z1) / 2
 
         # calculate std of features
         z1_std = F.normalize(z1, dim=-1).std(dim=0).mean()

@@ -194,21 +194,7 @@ class MoCoV2Plus(BaseMomentumMethod):
         # ------- contrastive loss -------
         # symmetric
         queue = self.queue.clone().detach()
-        nce_loss = (
-            moco_loss_func(q1, k2, queue[1], self.temperature)
-            + moco_loss_func(q2, k1, queue[0], self.temperature)
-        ) / 2
-
-        ### add our loss
-        original_loss = nce_loss
-        if self.our_loss=='True':
-            our_loss = ours_loss_func(q1_ori, q2_ori, indexes=batch[0].repeat(self.num_large_crops + self.num_small_crops), tau_decor = self.tau_decor)
-            total_loss = self.lam*our_loss + (1-self.lam)*original_loss
-        elif self.our_loss=='False':
-            total_loss = original_loss
-        else:
-            assert self.our_loss in ['True', 'False'], 'Input of our_loss is only True or False'
-        ###
+        total_loss = ( moco_loss_func(q1, k2, queue[1], self.temperature) + moco_loss_func(q2, k1, queue[0], self.temperature) ) / 2
 
         # ------- update queue -------
         keys = torch.stack((gather(k1), gather(k2)))
